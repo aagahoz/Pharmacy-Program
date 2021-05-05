@@ -527,4 +527,81 @@ int main()
 //	ilacAraBirEczanede("Merve", "Kan-Sulandirici");
 //	ilacAraTumEczanelerde("Kan-Sulandirici");
 	
-}
+	int altIslem;
+	int isAdmin;
+	int password = 1234, tempPassword;
+	cout << "Eczane otomasyonu baslatildi!" << endl << endl;
+	while(1 == 1)
+	{
+		cout << "Yoneticiyseniz `1`\nDegilseniz `2`\nGiriniz > ";
+		cin >> isAdmin;
+		cout << endl;
+		switch(isAdmin)
+		{
+			case 1:
+				cout << "Yonetici islemleri secildi" << endl;
+				cout << "Lutfen sifre giriniz > ";
+				cin >> tempPassword;
+				if(password == tempPassword)
+				{
+					system("cls");
+					cout << "Giris Basarili!" << endl << endl;
+					cout << "Eczane listesi olustur islemi icin `1`" << endl << "Eczane ekleme islemi icin `2`" << endl;
+					cout << "Ilac ekleme islemi icin `3`" << endl << "Ilac duzenleme islemi icin `4`" << endl;
+					cout << "Yapmak istediginiz islemi giriniz > ";
+					cin >> altIslem;
+					switch(altIslem)
+					{
+						case 1:
+							cout << "Eczane listesi olustur islemi secildi" << endl;
+							break;
+
+						case 2:
+							cout << "Eczane ekleme islemi secildi" << endl;
+							break;
+
+						case 3:
+							cout << "Ilac ekleme islemi secildi" << endl;
+							break;
+
+						case 4:
+							cout << "Ilac duzenleme islemi secildi" << endl;
+							break;					
+					}
+				}
+				else
+				{
+					cout << "Giris Basarisiz" << endl;
+				}
+				break;
+
+			case 2:
+				cout << "Musteri islemleri secildi" << endl;
+					cout << "Giris Basarili!" << endl << endl;
+					cout << "Ilac arama islemi icin `1`" << endl << "Eczane listeleme islemi icin `2`" << endl;
+					cout << "Herhangi bir eczameyi gosterme islemi icin `3`" << endl << "Herhangi bir eczaneye ait ilac listesi islemi icin `4`" << endl;
+					cout << "Yapmak istediginiz islemi giriniz > ";
+					cin >> altIslem;
+					switch(altIslem)
+					{
+						case 1:
+							cout << "Eczane listesi olustur islemi secildi" << endl;
+							break;
+
+						case 2:
+							cout << "Eczane ekleme islemi secildi" << endl;
+							break;
+
+						case 3:
+							cout << "Ilac ekleme islemi secildi" << endl;
+							break;
+
+						case 4:
+							cout << "Ilac duzenleme islemi secildi" << endl;
+							break;					
+					}
+				break;
+		}
+	}
+	return 0;
+} 
