@@ -189,45 +189,68 @@ class ilac
 		}
 };
 
+
+void eczaneListesiOlustur();
+void eczaneListesiOku();
+void eczaneGosterAdaGore(string tempEczaneIsim);
+void eczaneEkle();
+void ilacListesiOlusturEczaneIcin();
+void ilacListesiOkuDosyadanEczaneIcin(string tempEczaneIsim);
+void ilacEkleEczaneye(string tempEczaneIsim);
+void ilacDuzenle(string tempEczaneIsim);
+int ilacAraBirEczanede(string tempEczaneIsim, string tempIlacIsim);
+void ilacAraTumEczanelerde(string tempIlacIsim);
+
+
 void eczaneListesiOlustur()
 {
-	
 	eczane e[5];
 	e[0].eczaneDuzenle(1, "Agah", "Kadikoy");
 	e[1].eczaneDuzenle(2, "Merve", "Kartal");
 	e[2].eczaneDuzenle(3, "Enes", "Gebze");
 	
 	ofstream myfile("eczane_listesi.dat");
+	if (myfile.is_open())
+	{		
+		myfile << e[0].getEczaneID() << " "<< e[0].getEczaneIsim() << " " << e[0].getEczaneAdres() << endl;
+		myfile << e[1].getEczaneID() << " "<< e[1].getEczaneIsim() << " " << e[1].getEczaneAdres();
 	
-	myfile << e[0].getEczaneID() << " "<< e[0].getEczaneIsim() << " " << e[0].getEczaneAdres() << endl;
-	myfile << e[1].getEczaneID() << " "<< e[1].getEczaneIsim() << " " << e[1].getEczaneAdres();
-
-	myfile.close();
+		myfile.close();
+	}
+	else
+		cout << "--> Dosya acilamadi!" << endl;
 }
 
 void eczaneListesiOku()
 {
 	int tempID;
+	int islemBasarili = 0;
+	int i;
 	string tempIsim, tempAdres;
 	eczane e[5];
 	ifstream myfile("eczane_listesi.dat");
-
-	int i = 0;
-	while(!myfile.eof())
+	if (myfile.is_open())
 	{
-		myfile >> tempID  >> tempIsim >> tempAdres;
-		e[i].eczaneDuzenle(tempID, tempIsim, tempAdres);
-		i++;
+		i = 0;
+		while(!myfile.eof())
+		{
+			myfile >> tempID  >> tempIsim >> tempAdres;
+			e[i].eczaneDuzenle(tempID, tempIsim, tempAdres);
+			i++;
+		}
 	}
-	
-	cout << "eczane sayisi > " << i << endl;
-	int j = 0;
-	while(j < i)
+	if(islemBasarili)
 	{
-		e[j].showInfos();
-		j++;
+		int j = 0;
+		while(j < i)
+		{
+			e[j].showInfos();
+			j++;
+		}
+		myfile.close();
 	}
-	myfile.close();
+	else
+		cout << "--> Dosya acilamadi!" << endl;
 }
 
 void eczaneGosterAdaGore(string tempEczaneIsim)
@@ -236,55 +259,70 @@ void eczaneGosterAdaGore(string tempEczaneIsim)
 	char tempIsim[100], tempAdres[100];
 	eczane e[5];
 	ifstream myfile("eczane_listesi.dat");
-	
-	int i=0;
-	while(!myfile.eof())
+	if (myfile.is_open())
 	{
-		myfile >> tempID  >> tempIsim >> tempAdres;
-		e[i].eczaneDuzenle(tempID, tempIsim, tempAdres);
-		i++;
-	}
-	myfile.close();
-	
-	int j = 0;
-	while(j < i)
-	{
-		if(e[j].getEczaneIsim() == tempEczaneIsim)
+		int i=0;
+		while(!myfile.eof())
 		{
-			e[j].showInfos();
+			myfile >> tempID  >> tempIsim >> tempAdres;
+			e[i].eczaneDuzenle(tempID, tempIsim, tempAdres);
+			i++;
 		}
-		j++;
+		myfile.close();	
+		int j = 0;
+		while(j < i)
+		{
+			if(e[j].getEczaneIsim() == tempEczaneIsim)
+			{
+				e[j].showInfos();
+			}
+			j++;
+		}
 	}
+	else
+		cout << "--> Dosya acilamadi!" << endl;
 }
 
 void eczaneEkle()
 {
+	int islemBasarili = 0;
 	int tempID;
 	char tempIsim[100], tempAdres[100];
 	eczane e[5];
-	ifstream myfile1("eczane_listesi.dat");
-	
 	int i=0;
-	while(!myfile1.eof())
+	ifstream myfile1("eczane_listesi.dat");
+	if(myfile1.is_open())
 	{
-		myfile1 >> tempID  >> tempIsim >> tempAdres;
-		e[i].eczaneDuzenle(tempID, tempIsim, tempAdres);
-		i++;
+		i=0;
+		while(!myfile1.eof())
+		{
+			myfile1 >> tempID  >> tempIsim >> tempAdres;
+			e[i].eczaneDuzenle(tempID, tempIsim, tempAdres);
+			i++;
+		}
+		myfile1.close();
+		e[i+1].eczaneEkle();
+		islemBasarili = 1;
 	}
-	myfile1.close();
-	e[i+1].eczaneEkle();
-	
-	ofstream myfile2("eczane_listesi.dat");
-	
-	int j=0;
-	while(j<i)
+	if(islemBasarili)
 	{
-		myfile2 << e[j].getEczaneID() << " "<< e[j].getEczaneIsim() << " " << e[j].getEczaneAdres() << endl;
-		j++;
+		ofstream myfile2("eczane_listesi.dat");
+		if(myfile1.is_open())
+		{
+			int j=0;
+			while(j<i)
+			{
+				myfile2 << e[j].getEczaneID() << " "<< e[j].getEczaneIsim() << " " << e[j].getEczaneAdres() << endl;
+				j++;
+			}
+			myfile2 << e[i+1].getEczaneID() << " "<< e[i+1].getEczaneIsim() << " " << e[i+1].getEczaneAdres();
+		
+			myfile2.close();
+		}
+		cout << "--> Eczane basariyla eklendi!" << endl;
 	}
-	myfile2 << e[i+1].getEczaneID() << " "<< e[i+1].getEczaneIsim() << " " << e[i+1].getEczaneAdres();
-
-	myfile2.close();
+	else
+		cout << "--> Dosya acilamadi!" << endl;
 }
 
 void ilacListesiOlusturEczaneIcin()
@@ -296,23 +334,26 @@ void ilacListesiOlusturEczaneIcin()
 	i[2].ilacOlustur(3, "Sivilce-Kremi", 4, 54.2);
 
 	ofstream myfile1("Merve.dat");
-	
-	myfile1 << i[0].getIlacID() << " "<< i[0].getIlacIsim() << " " << i[0].getIlacMiktar() << " " << i[0].getIlacFiyat() << endl;
-	myfile1 << i[1].getIlacID() << " "<< i[1].getIlacIsim() << " " << i[1].getIlacMiktar() << " " << i[1].getIlacFiyat() << endl;
-	myfile1 << i[2].getIlacID() << " "<< i[2].getIlacIsim() << " " << i[2].getIlacMiktar() << " " << i[2].getIlacFiyat();
-
-	myfile1.close();
-	
+	if(myfile1.is_open())
+	{
+		myfile1 << i[0].getIlacID() << " "<< i[0].getIlacIsim() << " " << i[0].getIlacMiktar() << " " << i[0].getIlacFiyat() << endl;
+		myfile1 << i[1].getIlacID() << " "<< i[1].getIlacIsim() << " " << i[1].getIlacMiktar() << " " << i[1].getIlacFiyat() << endl;
+		myfile1 << i[2].getIlacID() << " "<< i[2].getIlacIsim() << " " << i[2].getIlacMiktar() << " " << i[2].getIlacFiyat();
+		myfile1.close();
+	}
 	
 	ofstream myfile2("Agah.dat");
-	ilac j[10];
-	j[0].ilacOlustur(1, "Ates-Dusurucu", 43, 23.3);
-	j[1].ilacOlustur(2, "Covid-Asisi", 23, 12.4);
-
-	myfile2 << j[0].getIlacID() << " "<< j[0].getIlacIsim() << " " << j[0].getIlacMiktar() << " " << j[0].getIlacFiyat() << endl;
-	myfile2 << j[1].getIlacID() << " "<< j[1].getIlacIsim() << " " << j[1].getIlacMiktar() << " " << j[1].getIlacFiyat();
-
-	myfile2.close();
+	if(myfile2.is_open())
+	{
+		ilac j[10];
+		j[0].ilacOlustur(1, "Ates-Dusurucu", 43, 23.3);
+		j[1].ilacOlustur(2, "Covid-Asisi", 23, 12.4);
+	
+		myfile2 << j[0].getIlacID() << " "<< j[0].getIlacIsim() << " " << j[0].getIlacMiktar() << " " << j[0].getIlacFiyat() << endl;
+		myfile2 << j[1].getIlacID() << " "<< j[1].getIlacIsim() << " " << j[1].getIlacMiktar() << " " << j[1].getIlacFiyat();
+	
+		myfile2.close();
+	}
 }
 
 void ilacListesiOkuDosyadanEczaneIcin(string tempEczaneIsim)
@@ -320,26 +361,33 @@ void ilacListesiOkuDosyadanEczaneIcin(string tempEczaneIsim)
 	int tempID, tempMiktar;
 	double tempFiyat;
 	string tempIsim;
-	
+	int islemBasarili = 0;
+	int i=1;
 	ilac ilaclar[10];
 	ifstream myfile(tempEczaneIsim + ".dat");
-
-	int i = 0;
-	while(!myfile.eof())
+	if(myfile.is_open())
 	{
-		myfile >> tempID  >> tempIsim >> tempMiktar >> tempFiyat;
-		ilaclar[i].ilacOlustur(tempID, tempIsim, tempMiktar, tempFiyat);
-		i++;
+		i = 0;
+		while(!myfile.eof())
+		{
+			myfile >> tempID  >> tempIsim >> tempMiktar >> tempFiyat;
+			ilaclar[i].ilacOlustur(tempID, tempIsim, tempMiktar, tempFiyat);
+			i++;
+		}
+		myfile.close();
+		islemBasarili = 1;
 	}
-
-	cout << "ilac sayisi > " << i << endl;
-	int j = 0;
-	while(j < i)
+	if(islemBasarili)
 	{
-		ilaclar[j].showInfos();
-		j++;
+		int j = 0;
+		while(j < i)
+		{
+			ilaclar[j].showInfos();
+			j++;
+		}
 	}
-	myfile.close();
+	else
+		cout << "--> Dosya acilamadi!" << endl;
 }
 
 void ilacEkleEczaneye(string tempEczaneIsim)
@@ -347,30 +395,42 @@ void ilacEkleEczaneye(string tempEczaneIsim)
 	int tempID, tempMiktar;
 	double tempFiyat;
 	string tempIsim;
-	
+	int islemBasarili = 0;
 	ilac ilaclar[10];
+	int i=0;
 	ifstream myfile1(tempEczaneIsim + ".dat");
+	if(myfile1.is_open())
+	{
+		i = 0;
+		while(!myfile1.eof())
+		{
+			myfile1 >> tempID  >> tempIsim >> tempMiktar >> tempFiyat;
+			ilaclar[i].ilacOlustur(tempID, tempIsim, tempMiktar, tempFiyat);
+			i++;
+		}
+		myfile1.close();
+		islemBasarili = 1;
+	}
+	if(islemBasarili)
+	{
+		ilaclar[i+1].ilacEkle();
 
-	int i = 0;
-	while(!myfile1.eof())
-	{
-		myfile1 >> tempID  >> tempIsim >> tempMiktar >> tempFiyat;
-		ilaclar[i].ilacOlustur(tempID, tempIsim, tempMiktar, tempFiyat);
-		i++;
+		ofstream myfile2(tempEczaneIsim + ".dat");
+		if(myfile2.is_open())
+		{
+			int j=0;
+			while(j<i)
+			{
+				myfile2 << ilaclar[j].getIlacID() << " "<< ilaclar[j].getIlacIsim() << " " << ilaclar[j].getIlacMiktar() << " " << ilaclar[j].getIlacFiyat() << endl;
+				j++;
+			}
+			myfile2 << ilaclar[i+1].getIlacID() << " "<< ilaclar[i+1].getIlacIsim() << " " << ilaclar[i+1].getIlacMiktar() << " " << ilaclar[i+1].getIlacFiyat();
+			myfile2.close();
+		}
+		cout << "Ilac basariyla eklendi!" << endl;
 	}
-	myfile1.close();
-	
-	ilaclar[i+1].ilacEkle();
-	
-	ofstream myfile2(tempEczaneIsim + ".dat");
-	int j=0;
-	while(j<i)
-	{
-		myfile2 << ilaclar[j].getIlacID() << " "<< ilaclar[j].getIlacIsim() << " " << ilaclar[j].getIlacMiktar() << " " << ilaclar[j].getIlacFiyat() << endl;
-		j++;
-	}
-	myfile2 << ilaclar[i+1].getIlacID() << " "<< ilaclar[i+1].getIlacIsim() << " " << ilaclar[i+1].getIlacMiktar() << " " << ilaclar[i+1].getIlacFiyat();
-	myfile2.close();
+	else
+		cout << "--> Dosya Acilamadi!" << endl;
 }
 
 void ilacDuzenle(string tempEczaneIsim)
@@ -378,49 +438,57 @@ void ilacDuzenle(string tempEczaneIsim)
 	int tempID, tempMiktar;
 	double tempFiyat;
 	string tempIsim;
-	
+	int islemBasarili = 0;
+	int i = 0;
 	ilac ilaclar[10];
 	ifstream myfile1(tempEczaneIsim + ".dat");
-
-	int i = 0;
-	while(!myfile1.eof())
+	if(myfile1.is_open())
 	{
-		myfile1 >> tempID  >> tempIsim >> tempMiktar >> tempFiyat;
-		ilaclar[i].ilacOlustur(tempID, tempIsim, tempMiktar, tempFiyat);
-		i++;
-	}
-	myfile1.close();
 	
-	cout << "Bilgileri degistirilecek ilacin adini giriniz > ";
-	cin >> tempIsim;
-	
-	int ilacVar = 0;
-	int j=0;
-	while(j<i)
-	{
-		if(ilaclar[j].getIlacIsim() == tempIsim)
+		i = 0;
+		while(!myfile1.eof())
 		{
-			ilaclar[j].ilacDuzenle();
-			ilacVar = 1;
+			myfile1 >> tempID  >> tempIsim >> tempMiktar >> tempFiyat;
+			ilaclar[i].ilacOlustur(tempID, tempIsim, tempMiktar, tempFiyat);
+			i++;
 		}
-	j++;
+		myfile1.close();
+		islemBasarili = 1;
 	}
-	if(!ilacVar)
+	if(islemBasarili)
 	{
-		cout << "Ilac sistemde bulunumadi, islem iptal edildi!" << endl;
-	}
-	
-	if(ilacVar)
-	{
-		ofstream myfile2(tempEczaneIsim + ".dat");
-		j=0;
+		cout << "Bilgileri degistirilecek ilacin adini giriniz > ";
+		cin >> tempIsim;
+		
+		int ilacVar = 0;
+		int j=0;
 		while(j<i)
 		{
-			myfile2 << ilaclar[j].getIlacID() << " "<< ilaclar[j].getIlacIsim() << " " << ilaclar[j].getIlacMiktar() << " " << ilaclar[j].getIlacFiyat() << endl;
-			j++;
+			if(ilaclar[j].getIlacIsim() == tempIsim)
+			{
+				ilaclar[j].ilacDuzenle();
+				ilacVar = 1;
+			}
+		j++;
 		}
-		myfile2.close();	
+		if(!ilacVar)
+		{
+			cout << "Ilac sistemde bulunumadi, islem iptal edildi!" << endl;
+		}
+		if(ilacVar)
+		{
+			ofstream myfile2(tempEczaneIsim + ".dat");
+			j=0;
+			while(j<i)
+			{
+				myfile2 << ilaclar[j].getIlacID() << " "<< ilaclar[j].getIlacIsim() << " " << ilaclar[j].getIlacMiktar() << " " << ilaclar[j].getIlacFiyat() << endl;
+				j++;
+			}
+			myfile2.close();	
+		}
 	}
+	else
+		cout << "--> Dosya acilamadi!" << endl;
 }
 
 int ilacAraBirEczanede(string tempEczaneIsim, string tempIlacIsim)
@@ -428,40 +496,44 @@ int ilacAraBirEczanede(string tempEczaneIsim, string tempIlacIsim)
 	int tempID, tempMiktar;
 	double tempFiyat;
 	string tempIsim;
-	
+	int islemBasarili = 0;
+	int i=0;
+	int ilacVar = 0;
 	ilac ilaclar[10];
 	ifstream myfile1(tempEczaneIsim + ".dat");
-
-	int i = 0;
-	while(!myfile1.eof())
+	if(myfile1.is_open())
 	{
-		myfile1 >> tempID  >> tempIsim >> tempMiktar >> tempFiyat;
-		ilaclar[i].ilacOlustur(tempID, tempIsim, tempMiktar, tempFiyat);
-		i++;
-	}
-	myfile1.close();
-	
-	
-	int ilacVar = 0;
-	int j=0;
-	while(j<i)
-	{
-		if(ilaclar[j].getIlacIsim() == tempIlacIsim)
+		i = 0;
+		while(!myfile1.eof())
 		{
-			ilacVar = 1;
-			tempMiktar = ilaclar[j].getIlacMiktar();
+			myfile1 >> tempID  >> tempIsim >> tempMiktar >> tempFiyat;
+			ilaclar[i].ilacOlustur(tempID, tempIsim, tempMiktar, tempFiyat);
+			i++;
 		}
-	j++;
+		myfile1.close();
+		islemBasarili = 1;
 	}
-	if(!ilacVar)
+	if(islemBasarili)
 	{
-		cout << "Ilac " << tempEczaneIsim << " eczanesinde bulunmamaktadir!" << endl;
+		int j=0;
+		while(j<i)
+		{
+			if(ilaclar[j].getIlacIsim() == tempIlacIsim)
+			{
+				ilacVar = 1;
+				tempMiktar = ilaclar[j].getIlacMiktar();
+			}
+		j++;
+		}
+		if(!ilacVar)
+		{
+			cout << "Ilac " << tempEczaneIsim << " eczanesinde bulunmamaktadir!" << endl;
+		}
+		if(ilacVar)
+		{
+			cout << "Ilac " << tempEczaneIsim << " eczanesinde " << tempMiktar << " adet bulunmaktadir." << endl;
+		}
 	}
-	if(ilacVar)
-	{
-		cout << "Ilac " << tempEczaneIsim << " eczanesinde " << tempMiktar << " adet bulunmaktadir." << endl;
-	}
-	
 	return ilacVar;
 }
 
@@ -470,16 +542,21 @@ void ilacAraTumEczanelerde(string tempIlacIsim)
 	int tempID;
 	string tempIsim, tempAdres;
 	eczane e[5];
-	ifstream myfile("eczane_listesi.dat");
-
+	int islemBasarili = 0;
 	int i = 0;
-	while(!myfile.eof())
+	ifstream myfile("eczane_listesi.dat");
+	if(myfile.is_open())
 	{
-		myfile >> tempID  >> tempIsim >> tempAdres;
-		e[i].eczaneDuzenle(tempID, tempIsim, tempAdres);
-		i++;
-	}
-	
+		i = 0;
+		while(!myfile.eof())
+		{
+			myfile >> tempID  >> tempIsim >> tempAdres;
+			e[i].eczaneDuzenle(tempID, tempIsim, tempAdres);
+			i++;
+		}
+		myfile.close();
+		islemBasarili = 1;
+	}	
 	int varMi = 0;
 	int var = 0;
 	int olanEczaneNumaralari[5] = {0};
@@ -496,7 +573,6 @@ void ilacAraTumEczanelerde(string tempIlacIsim)
 		}
 		j++;
 	}
-	
 	j=0;
 	while(j<k)
 	{
@@ -505,32 +581,15 @@ void ilacAraTumEczanelerde(string tempIlacIsim)
 	}
 }
 
-
 int main()
-{
-	eczaneListesiOlustur();
-//	eczaneListesiOku();	
-//	eczaneGosterAdaGore("Agah");
-	
-	ilacListesiOlusturEczaneIcin();
-//	ilacListesiOkuDosyadanEczaneIcin("Agah");
-//	eczaneEkle();
-//	eczaneListesiOku();
-
-//	ilacEkleEczaneye("Merve");
-//	ilacListesiOkuDosyadanEczaneIcin("Merve");	
-//	ilacEkleEczaneye("Merve");
-//	ilacListesiOkuDosyadanEczaneIcin("Merve");
-	
-//	ilacListesiOkuDosyadanEczaneIcin("Merve");
-//	ilacDuzenle("Merve");
-//	ilacAraBirEczanede("Merve", "Kan-Sulandirici");
-//	ilacAraTumEczanelerde("Kan-Sulandirici");
-	
+{	
 	int altIslem;
 	int isAdmin;
 	int password = 1234, tempPassword;
+	string tempEczaneIsim, tempIlacIsim;
 	cout << "Eczane otomasyonu baslatildi!" << endl << endl;
+	eczaneListesiOlustur();
+	ilacListesiOlusturEczaneIcin();
 	while(1 == 1)
 	{
 		cout << "Yoneticiyseniz `1`\nDegilseniz `2`\nGiriniz > ";
@@ -553,19 +612,29 @@ int main()
 					switch(altIslem)
 					{
 						case 1:
-							cout << "Eczane listesi olustur islemi secildi" << endl;
+							cout << "--> Eczane listesi olustur islemi secildi" << endl;
+							eczaneListesiOlustur();
+							ilacListesiOlusturEczaneIcin();
+							cout << "--> Eczaneler ve Ilaclar listesi basariyla olusturuldu!" << endl;
 							break;
 
 						case 2:
-							cout << "Eczane ekleme islemi secildi" << endl;
+							cout << "--> Eczane ekleme islemi secildi" << endl;
+							eczaneEkle();
 							break;
 
 						case 3:
-							cout << "Ilac ekleme islemi secildi" << endl;
+							cout << "--> Ilac ekleme islemi secildi" << endl;
+							cout << "Ilacin eklenecegi eczaneyi giriniz >" << endl;
+							cin >> tempEczaneIsim;
+							ilacEkleEczaneye(tempEczaneIsim);
 							break;
 
 						case 4:
 							cout << "Ilac duzenleme islemi secildi" << endl;
+							cout << "Bilgileri guncellenecek ilacin bulundugu eczanenin adini giriniz > ";
+							cin >> tempEczaneIsim;
+							ilacDuzenle(tempEczaneIsim);
 							break;					
 					}
 				}
@@ -585,19 +654,29 @@ int main()
 					switch(altIslem)
 					{
 						case 1:
-							cout << "Eczane listesi olustur islemi secildi" << endl;
+							cout << "Ilac arama islemi secildi" << endl;
+							cout << "Aranacak ilacin adini giriniz > ";
+							cin >> tempIlacIsim;
+							ilacAraTumEczanelerde(tempIlacIsim);
 							break;
 
 						case 2:
-							cout << "Eczane ekleme islemi secildi" << endl;
+							cout << "Eczane listeleme islemi secildi" << endl;
+							eczaneListesiOku();	
 							break;
 
 						case 3:
-							cout << "Ilac ekleme islemi secildi" << endl;
+							cout << "Isme gore eczane bilgisi bastirma islemi secildi" << endl;
+							cout << "Eczanenin adini giriniz >" << endl;
+							cin >> tempEczaneIsim;
+							eczaneGosterAdaGore(tempEczaneIsim);
 							break;
 
 						case 4:
-							cout << "Ilac duzenleme islemi secildi" << endl;
+							cout << "Eczane ismine gore eczane listesi bastirma islemi secildi" << endl;
+							cout << "Eczanenin adini giriniz >" << endl;
+							cin >> tempEczaneIsim;
+							ilacListesiOkuDosyadanEczaneIcin(tempEczaneIsim);
 							break;					
 					}
 				break;
