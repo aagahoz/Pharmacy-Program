@@ -7,4 +7,4 @@ main.cpp ve main_2.cpp olarak ayrilmasinin nedeni odevin 2 farkli metotla yapilm
 2. metot klasik dosya okuma yazma yapilmasidir, yani veriler objeye okunduktan sonra cevrilmektedir.
 
 Repo Toplamda ~1600 kod icermektedir. Dosya ve Class konularinda ciddi tecrubeler kazandirmistir kendi capimda :)
-Saygilar:)
+Saygilar 🥳🥳🥳
