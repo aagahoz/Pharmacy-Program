@@ -220,8 +220,8 @@ void eczaneIsimListesiOlustur()
 	int ID1 = 1; 
 	int ID2 = 2;
 
-	char *name1 = "Cicek"; 
-	char *name2 = "Arapcesme";
+	char *name1 = "Sifa"; 
+	char *name2 = "Cicek";
 
 	char *adres1 = "Mustafapasa Mah."; 
 	char *adres2 = "Arapcesme Mah."; 
@@ -363,7 +363,7 @@ void eczaneOlusturDosyaya()
 	int ilacSayisi = 5;
 	
 	fstream f;
-	f.open("Cicek.dat", ios::out);
+	f.open("Sifa.dat", ios::out);
 
 	int j = 0;
 	while(j < ilacSayisi)
@@ -377,7 +377,7 @@ void eczaneOlusturDosyaya()
 	ii[0].ilacOlustur(1,"Metotreksat", 5, 23.99);
 	ii[1].ilacOlustur(2,"Aspirin", 3, 12.54);
 	ii[2].ilacOlustur(3,"İnsüMorfin", 1, 323.2);
-	f.open("Arapcesme.dat", ios::out);
+	f.open("Cicek.dat", ios::out);
 	j = 0;
 	while(j < 3)
 	{
@@ -633,7 +633,7 @@ int main()
 	int isAdmin;
 	int islemSayisi;
 	char tempEczaneIsim[10];
-	int password = 1234, tempPassword;
+	int password = 2351, tempPassword;
 	eczaneIsimListesiOlustur();
 	eczaneOlusturDosyaya();	
 	cout << endl << "Eczane otomasyonu baslatildi!" << endl << endl;
