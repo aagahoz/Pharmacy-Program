@@ -18,32 +18,32 @@ class eczane
 			this->eczaneID = 0;
 			strcpy(this->eczaneIsim, "NULL");
 			strcpy(this->eczaneAdres, "NULL");
-			//cout << "Obje Default Olusturuldu" << endl;
 		}
-		
 		eczane(int eczaneID, char eczaneIsim[10], char eczaneAdres[100])
 		{
 			this->eczaneID = eczaneID;
 			strcpy(this->eczaneIsim, eczaneIsim);
 			strcpy(this->eczaneAdres, eczaneAdres);
-			//cout << "Obje Argumanla Olusturuldu" << endl;
 		}
-		/*
-		eczane(const eczane &ecz)
+		eczane (const eczane &obj)
 		{
-			cout << "Obje Copy Constructor ile Olusturuldu" << endl;
+			this->eczaneID = obj.eczaneID;
+			strcpy(this->eczaneIsim, obj.eczaneIsim);
+			strcpy(this->eczaneAdres, eczaneAdres);
 		}
-		eczane& operator = (const eczane &ecz)
+		eczane& operator = (const eczane &obj)
 		{
-			cout << "Obje Assigment Operator ile Olusturuldu" << endl;
+			this->eczaneID = obj.eczaneID;
+			strcpy(this->eczaneIsim, obj.eczaneIsim);
+			strcpy(this->eczaneAdres, eczaneAdres);
 			return *this;
 		}
-		*/
+		~eczane()
+		{}
 		void showInfos()
 		{
 			cout << "	ID > " << this->eczaneID << endl << "	Isim > " << this->eczaneIsim << endl << "	Adres > " << this->eczaneAdres << endl << endl;
 		}
-		
 		void setEczaneID(int eczaneID)
 		{
 			this->eczaneID = eczaneID;
@@ -56,7 +56,6 @@ class eczane
 		{
 			strcpy(this->eczaneAdres, eczaneAdres);
 		}
-		
 		int getEczaneID()
 		{
 			return this->eczaneID;
@@ -69,7 +68,6 @@ class eczane
 		{
 			return this->eczaneAdres;
 		}
-		
 		void eczaneEkle()
 		{
 			cout << "Bilgileri Giriniz!" << endl;
@@ -80,6 +78,12 @@ class eczane
 			cout << "Adres > ";
 			cin >> this->eczaneAdres;
 			cout << "Bilgiler Basariyla Kaydedildi!" << endl;
+		}
+		void ilacOlustur(int eczaneID, char eczaneIsim[10], char eczaneAdres[100])
+		{
+			this->eczaneID = eczaneID;
+			strcpy(this->eczaneIsim, eczaneIsim);
+			strcpy(this->eczaneAdres, eczaneAdres);
 		}
 };
 
@@ -97,7 +101,6 @@ class ilac
 			strcpy(this->ilacIsim, "Null");
 			this->ilacMiktar = 0;
 			this->ilacFiyat = 0;
-			//cout << "Obje Default Olusturuldu" << endl;
 		}
 		
 		ilac(int ilacID, char ilacIsim[10], int ilacMiktar, double ilacFiyat)
@@ -106,19 +109,7 @@ class ilac
 			strcpy(this->ilacIsim, "Null");
 			this->ilacMiktar = ilacMiktar;
 			this->ilacFiyat = ilacFiyat;
-			//cout << "Obje Argumanla Olusturuldu" << endl;
 		}
-		/*
-		ilac(const ilac &ilc)
-		{
-			cout << "Obje Copy Constructor ile Olusturuldu" << endl;
-		}
-		ilac& operator = (const ilac &ilc)
-		{
-			cout << "Obje Assigment Operator ile Olusturuldu" << endl;
-			return *this;
-		}
-		*/
 		void showInfos()
 		{
 			cout << "ID > " << this->ilacID << endl << "Name > " << this->ilacIsim << endl << "Miktar > " << this->ilacMiktar <<  endl << "Fiyat > " << this->ilacFiyat << endl << endl;
@@ -214,9 +205,6 @@ void ilacDuzenleDosyadan(char tempEczaneIsim[20]);
 int eczaneVarMiEczaneDosyasinda(char tempEczaneIsim[20]);
 void ilacIsimleriniBastirMenuIcin(char tempEczaneIsim[20]);
 void eczaneIsimleriniBastirMenuIcin(char tempEczaneIsim[20]);
-//eczane *eczaneOkuDosyadan();
-//void eczaneleriYazDosyaya(eczane *eskiEczaneler, eczane yeniEczane);
-
 
 string datEkle(char *tempCharArray)
 {
@@ -330,13 +318,15 @@ void eczaneEkleDosyaya()
 	e[eczaneSayisi].eczaneEkle();
 	f.close();	
 	eczaneSayisi++;
-	f.open("eczane_listesi.dat",ios::out);
+	f.open("eczane_listesi.dat", ios::out);
 	i = 0;
 	while(i < eczaneSayisi)
 	{
 		f.write((char*)&e[i], sizeof(e[i]));
 		i++;
 	}
+	f.close();
+	f.open(datEkle(e[eczaneSayisi - 1].getEczaneIsim()), ios::out);
 	f.close();
 }
 
@@ -490,7 +480,7 @@ void ilacEkleDosyaya(char tempEczaneIsim[20])
 	
 	int ilacSayisi = bulIlacSayisiDosyadan(tempEczaneIsim);
 	
-	ilac i[ilacSayisi + 1];
+	ilac i[10];
 	
 	int j = 0;
 	while(j < ilacSayisi)
@@ -636,58 +626,9 @@ void eczaneIsimleriniBastirMenuIcin()
 	f.close();
 }
 
-/*
-eczane *eczaneOkuDosyadan()
-{
-	int eczaneSayisi = bulEczaneSayisi();
-	eczane e[eczaneSayisi];
-	
-    fstream f;
-	f.open("eczane_listesi.dat", ios::in);
-	
-	int i = 0;
-	while(i<eczaneSayisi)
-	{
-		f.read((char *) &e[i], sizeof(e[i]));
-		i++;
-	}
-	f.close();
-	return e;
-}
-*/
-
-/*
-void eczaneleriYazDosyaya(eczane *eskiEczaneler, eczane yeniEczane)
-{
-	int eczaneSayisi = bulEczaneSayisi();
-	
-	fstream f;
-	f.open("eczane_listesi1.dat",ios::app);
-	int i = 0;
-
-	eczane *tempPtr = eskiEczaneler;
-	eczane tempE(1,"agah", "Osmanyilmaz");
-
-	while(i<eczaneSayisi)
-	{
-		cout << "bitti" << endl;
-
-		f.write((char*)&tempPtr[i], sizeof(tempPtr[i]));
-		i++;
-	}
-	f.write((char*)&tempE, sizeof(tempE));
-	f.close();
-}
-*/
-
 
 int main()
-{
-	/*
-	Eczanenin ilacin olmadigi durumlardaki olusan hatalar giderilecek
-	*/
-	
-	
+{	
 	int altIslem;             
 	int isAdmin;
 	int islemSayisi;
@@ -698,7 +639,7 @@ int main()
 	cout << endl << "Eczane otomasyonu baslatildi!" << endl << endl;
 	while(1 == 1)
 	{
-		cout << "Yoneticiyseniz `1`\nDegilseniz `2`\nGiriniz > ";
+		cout << endl <<"Yoneticiyseniz `1`\nDegilseniz `2`\nGiriniz > ";
 		cin >> isAdmin;
 		cout << endl;
 		switch(isAdmin)
